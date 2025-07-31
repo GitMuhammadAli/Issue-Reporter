@@ -36,6 +36,19 @@ status: string;
 @Prop({ enum: ['user', 'admin'], default: 'user' })
 role: string;
 
+@Prop({ type: [String], default: [] })
+mediaUrls: string[];
+
+@Prop({ type: [String], default: [] })
+  upvotes: string[];
+
+   @Prop({ default: null })
+  deletedAt: Date;
+
+
+@Prop({ default: 0 })
+upvotesCount: number;
+
 }
 
 export const IssueSchema = SchemaFactory.createForClass(Issue);
