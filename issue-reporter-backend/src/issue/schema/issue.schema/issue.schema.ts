@@ -30,25 +30,23 @@ export class Issue {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   userId: Types.ObjectId;
 
- @Prop({ enum: ['open', 'verified', 'closed'], default: 'open' })
-status: string;
+  @Prop({ enum: ['open', 'verified', 'closed'], default: 'open' })
+  status: string;
 
-@Prop({ enum: ['user', 'admin'], default: 'user' })
-role: string;
+  @Prop({ enum: ['user', 'admin'], default: 'user' })
+  role: string;
 
-@Prop({ type: [String], default: [] })
-mediaUrls: string[];
+  @Prop({ type: [String], default: [] })
+  mediaUrls: string[];
 
-@Prop({ type: [String], default: [] })
+  @Prop({ type: [String], default: [] })
   upvotes: string[];
 
-   @Prop({ default: null })
+  @Prop({ default: null })
   deletedAt: Date;
 
-
-@Prop({ default: 0 })
-upvotesCount: number;
-
+  @Prop({ default: 0 })
+  upvotesCount: number;
 }
 
 export const IssueSchema = SchemaFactory.createForClass(Issue);

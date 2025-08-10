@@ -18,7 +18,6 @@ import {
 import { IssueService } from './issue.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Request, Response } from 'express';
-import type { File as MulterFile } from 'multer';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { UpdateIssueDto } from './dto/update-issue.dto';
 import { IssueOwnerGuard } from './guards/issue-owner.guard';
@@ -30,6 +29,9 @@ import { existsSync, mkdirSync, createReadStream } from 'fs';
 import { FindIssuesQueryDto } from './dto/find-issues-query.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Throttle } from '@nestjs/throttler';
+import { Express } from 'express';
+type MulterFile = Express.Multer.File;
+
 
 
 const storage = diskStorage({

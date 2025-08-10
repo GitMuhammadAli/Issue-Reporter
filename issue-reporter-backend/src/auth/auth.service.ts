@@ -10,20 +10,31 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(username: string, email: string, password: string) {
+  async register(name: string, email: string, password: string , role:string) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.usersService.create({ username, email, password: hashedPassword });
+    const user = await this.usersService.create({ name, email, password: hashedPassword , role:role });
     return user;
   }
 
   async login(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new Error('Invalid credentials');
-    }
-    const payload = { sub: user._id, email: user.email, role: user.role };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  const user = await this.usersService.findByEmail(email);
+  console.log('Found user:', user);
+
+  if (!user) {
+    throw new Error('Invalid credentials - user not found');
   }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  console.log('Password match:', isMatch);
+
+  if (!isMatch) {
+    throw new Error('Invalid credentials - password mismatch');
+  }
+
+  const payload = { sub: user._id, email: user.email, role: user.role };
+  return {
+    access_token: this.jwtService.sign(payload),
+  };
+}
+
 }

@@ -11,26 +11,33 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const usersService = app.get(UsersService);
-  const existingAdmin = await usersService.findByEmail('admin@example.com');
-  
-   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
-  });
+  await usersService.ensureAdminExists();
+
+  const adminEmail = 'admin@issueReporter.com';
+
+  const existingAdmin = await usersService.findByEmail(adminEmail);
+
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash('Admin@123', 10);
 
     await usersService.create({
-      username: 'Admin',
-      email: 'admin@issueReporter.com',
+      name: 'Admin',
+      email: adminEmail,
       password: hashedPassword,
       role: 'admin',
     });
 
-    console.log('✅ Admin user created with email: admin@example.com and password: Admin@123');
+    console.log(
+      `✅ Admin user created with email: ${adminEmail} and password: Admin@123`,
+    );
   } else {
     console.log('✅ Admin already exists.');
   }
-app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
-  await app.listen(3000);
+
+  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  });
+  await app.listen(7777);
 }
 bootstrap();
